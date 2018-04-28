@@ -73,7 +73,59 @@ Graph *CreateGraph(int *Matrix, int line, int column)
 		}
 
 		ArrNode[i] = CreateNode(i, num_contact);
+
+		if (i != 0)
+			ArrNode[i - 1]->next = ArrNode[i];
+
+		#if 0
+		printf("%d\t", ArrNode[i]->index);
+		printf("%p\t", ArrNode[i]);
+		printf("%p\n", ArrNode[i]->next);
+		#endif
 	}
+
+	for (int i = 0; i < line; i++) {
+		// printf("i = %d\n", i);
+		int ind_cont = 0;
+		for (int j = 0; j < column; j++) {
+
+			if (Matrix[GetIndex(line, i, j)] == 1) {
+				// printf("j = %d\t ind_cont = %d\n", j, ind_cont);
+				ArrNode[i]->Contact[ind_cont] = ArrNode[j];
+				ind_cont++;
+			}
+
+		}
+	}
+
+	graph->Head = ArrNode[0];
+
+	#if 0
+	printf("Index\tNode\t\tNext\t\tColor\tNumCont\tStatus\n");
+	Node *node = graph->Head;
+	for (int i = 0; i < graph->number; i++) {
+		printf("%d\t", node->index);
+		printf("%p\t", node);
+		printf("%p\t", node->next);
+
+		if (i == graph->number - 1)
+			printf("\t");
+
+		printf("%d\t", node->color);
+		printf("%d\t", node->number);
+		printf("%d\n", node->status);
+
+		for (int j = 0; j < node->number; j++) {
+			printf("%p\t", node->Contact[j]);
+			printf("%d\n", node->Contact[j]->index);
+		}
+		// printf("\n");
+
+		node = node->next;
+	}
+	#endif
+
+	PritntInfoGraph(graph);
 
 	free(ArrNode);
 
@@ -83,13 +135,41 @@ Graph *CreateGraph(int *Matrix, int line, int column)
 Node *CreateNode(int index, int num_contact)
 {
 	Node *node = malloc(sizeof(Node));
+	node->next = NULL;
 	node->Contact = malloc(sizeof(Node) * num_contact);
 	node->index = index;
 	node->color = -1;
 	node->number = num_contact;
-	node->status = 1;
+	node->status = 0;
 
 	return node;
+}
+
+void PritntInfoGraph(Graph *graph)
+{
+	Node *node = graph->Head;
+
+	printf("Index\tNode\t\tNext\t\tColor\tNumCont\tStatus\n");
+	
+	for (int i = 0; i < graph->number; i++) {
+		printf("%d\t", node->index);
+		printf("%p\t", node);
+		printf("%p\t", node->next);
+
+		if (i == graph->number - 1)
+			printf("\t");
+
+		printf("%d\t", node->color);
+		printf("%d\t", node->number);
+		printf("%d\n", node->status);
+
+		for (int j = 0; j < node->number; j++) {
+			printf("%p\t", node->Contact[j]);
+			printf("%d\n", node->Contact[j]->index);
+		}
+
+		node = node->next;
+	}
 }
 
 void ColoringGraph()

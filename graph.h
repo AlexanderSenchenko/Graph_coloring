@@ -12,6 +12,7 @@ typedef struct Graph
 
 typedef struct Node
 {
+	struct Node *next;		// Следущий по индексу узелу
 	struct Node **Contact;	// Массив связей
 	int index;				// Номер узла
 	int color;				// Цвет
@@ -25,6 +26,7 @@ void PrintMatrix(int *Matrix, int line, int column);
 
 Graph *CreateGraph(int *Matrix, int line, int column);
 Node *CreateNode(int index, int num_contact);
+void PritntInfoGraph(Graph *graph);
 void ColoringGraph();
 void GraphImageCreation(int *Matrix, int line, int column);
 
