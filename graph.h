@@ -26,8 +26,9 @@ void PrintMatrix(int *Matrix, int line, int column);
 
 Graph *CreateGraph(int *Matrix, int line, int column);
 Node *CreateNode(int index, int num_contact);
-void PritntInfoGraph(Graph *graph);
-void ColoringGraph();
-void GraphImageCreation(int *Matrix, int line, int column);
+void PrintInfoGraph(Graph *graph);
+void RebootGraph(Graph *graph);
+
+void GraphImageCreation(Graph *graph);
 
 #endif

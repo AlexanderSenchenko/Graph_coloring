@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "GraphColoring.h"
 
 int main()
 {
@@ -8,7 +8,6 @@ int main()
 	struct Graph *graph;
 
 	GetMatrix(&Matrix, &line, &column);
-	//PrintMatrix(Matrix, line, column);
 
 	graph = CreateGraph(Matrix, line, column);
 	if (graph == NULL) {
@@ -20,14 +19,7 @@ int main()
 		return 0;
 	}
 
-	// Node *node = graph->FirstNode;
-	// while (node != NULL) {
-	// 	printf("%p\n", node);
-	// 	node = node->next;
-	// }
-
-	GraphImageCreation(Matrix, line, column);
-	system("dot -Tpng graph.gv -ograph.png");
+	ColoringGraph(graph);
 
 	free(Matrix);
 

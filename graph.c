@@ -40,10 +40,7 @@ void GetMatrix(int **Matrix, int *line, int *column)
 	fclose(stream);
 }
 
-int GetIndex(int line, int i, int j)
-{
-	return line * i + j;
-}
+int GetIndex(int line, int i, int j) { return line * i + j; }
 
 void PrintMatrix(int *Matrix, int line, int column)
 {
@@ -85,12 +82,11 @@ Graph *CreateGraph(int *Matrix, int line, int column)
 	}
 
 	for (int i = 0; i < line; i++) {
-		// printf("i = %d\n", i);
 		int ind_cont = 0;
+
 		for (int j = 0; j < column; j++) {
 
 			if (Matrix[GetIndex(line, i, j)] == 1) {
-				// printf("j = %d\t ind_cont = %d\n", j, ind_cont);
 				ArrNode[i]->Contact[ind_cont] = ArrNode[j];
 				ind_cont++;
 			}
@@ -99,33 +95,6 @@ Graph *CreateGraph(int *Matrix, int line, int column)
 	}
 
 	graph->Head = ArrNode[0];
-
-	#if 0
-	printf("Index\tNode\t\tNext\t\tColor\tNumCont\tStatus\n");
-	Node *node = graph->Head;
-	for (int i = 0; i < graph->number; i++) {
-		printf("%d\t", node->index);
-		printf("%p\t", node);
-		printf("%p\t", node->next);
-
-		if (i == graph->number - 1)
-			printf("\t");
-
-		printf("%d\t", node->color);
-		printf("%d\t", node->number);
-		printf("%d\n", node->status);
-
-		for (int j = 0; j < node->number; j++) {
-			printf("%p\t", node->Contact[j]);
-			printf("%d\n", node->Contact[j]->index);
-		}
-		// printf("\n");
-
-		node = node->next;
-	}
-	#endif
-
-	PritntInfoGraph(graph);
 
 	free(ArrNode);
 
@@ -145,7 +114,7 @@ Node *CreateNode(int index, int num_contact)
 	return node;
 }
 
-void PritntInfoGraph(Graph *graph)
+void PrintInfoGraph(Graph *graph)
 {
 	Node *node = graph->Head;
 
@@ -163,28 +132,41 @@ void PritntInfoGraph(Graph *graph)
 		printf("%d\t", node->number);
 		printf("%d\n", node->status);
 
-		for (int j = 0; j < node->number; j++) {
-			printf("%p\t", node->Contact[j]);
-			printf("%d\n", node->Contact[j]->index);
+		if (node->Contact != NULL) {
+			for (int j = 0; j < node->number; j++) {
+				printf(">ind: %d\t", node->Contact[j]->index);
+				// printf("%p\t\t\t", node->Contact[j]);
+				printf("color: %d\n", node->Contact[j]->color);
+			}
 		}
 
 		node = node->next;
 	}
 }
 
-void ColoringGraph()
+void RebootGraph(Graph *graph)
 {
-	
+	Node *node = graph->Head;
+
+	while (node != NULL) {
+		node->color = -1;
+		node->status = 0;
+
+		node = node->next;
+	}
 }
 
-void GraphImageCreation(int *Matrix, int line, int column)
+void GraphImageCreation(Graph *graph)
 {
+	// char *file = ;
+
 	FILE *out = fopen("graph.gv", "w");
 	if (out == NULL) {
 		return;
 	}
 
-	int index, value;
+	Node *node = graph->Head;
+
 	char elem = '"';
 	char *colors[6] = {"red", "lawngreen", "deeppink", "cyan", "indigo", "purple"};
 
@@ -196,21 +178,30 @@ void GraphImageCreation(int *Matrix, int line, int column)
 
 	fprintf(out, "\tedge [dir=%cnone%c];\n\n", elem, elem);
 
-	for (int i = 0; i < line; i++) {
-		fprintf(out, "\t%cNode %d%c [fillcolor=%c%s%c]\n", elem, i, elem, elem, colors[i], elem);
+	for (int i = 0; i < graph->number; i++) {
+		int ncolor = node->color;
+		fprintf(out, "\t%cNode %d%c [fillcolor=%c%s%c]\n", 
+								elem, i, elem, elem, colors[ncolor], elem);
+		node = node->next;
 	}
+
 	fprintf(out, "\n");
 
-	for (int i = 0; i < line; i++) {
-		for (int j = 0; j < column; j++) {
-			index = GetIndex(line, i, j);
-			value = Matrix[index];
-			if (i < j && value > 0) {
+	node = graph->Head;
+
+	for (int i = 0; i < graph->number; i++) {
+		for (int j = 0; j < node->number; j++) {
+			int indCont = node->Contact[j]->index;
+			
+			if (i < indCont) {
 				fprintf(out, "\t%cNode %d%c -> ", elem, i, elem);
-				fprintf(out, "%cNode %d%c;\n", elem, j, elem);
-			}
+				fprintf(out, "%cNode %d%c;\n", elem, indCont, elem);
+			}	
 		}
+		node = node->next;
 	}
+
 	fprintf(out, "}\n");
+	
 	fclose(out);
 }
