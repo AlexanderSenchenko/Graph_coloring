@@ -2,6 +2,7 @@
 
 void ColoringGraph(Graph *graph)
 {
+	#if 0
 	if (TwoColor(graph) == 0) {
 		PrintInfoGraph(graph);
 
@@ -10,8 +11,12 @@ void ColoringGraph(Graph *graph)
 	}
 
 	RebootGraph(graph);
+	#endif
+
+	TrheeColor(graph);
 }
 
+//////////////////// 2 ////////////////////
 int TwoColor(Graph *graph)
 {
 	Node *node = graph->Head;
@@ -75,3 +80,16 @@ int CheckColorNode(Node *node, int color)
 
 	return 0;
 }
+
+//////////////////// 3 ////////////////////
+int TrheeColor(Graph *graph)
+{
+	Node *node = graph->Head;
+
+
+	return 0;
+}
+
+//////////////////// 4 ////////////////////
+
+//////////////////// 5 ////////////////////
