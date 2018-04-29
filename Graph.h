@@ -39,6 +39,9 @@ HashT *CreateNodeHashT();
 Node *DeleteNodeSave(Graph **graph, int ind);
 void DeleteNodeList(Node *Head, Node *node);
 
+Graph *RestoringNode(Graph *graph, Node *node);
+void RestoringContact(Graph *graph, Node *node);
+
 void PrintInfoGraph(Graph *graph);
 void RebootGraph(Graph *graph);
 

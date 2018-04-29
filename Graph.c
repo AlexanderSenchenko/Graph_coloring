@@ -190,9 +190,61 @@ void DeleteNodeList(Node *Head, Node *node)
 				contact->next->parent = contact->parent;
 
 			head->number--;
+
+			contact->node = NULL;
+			contact->next = NULL;
+			contact->parent = NULL;
+			free(contact);
 		}
 
 		head = head->next;
+	}
+}
+
+Graph *RestoringNode(Graph *graph, Node *node)
+{
+	if (node->parent != NULL) {
+		node->parent->next = node;
+	} else {
+		graph->Head = node;
+	}
+
+	if (node->next != NULL)
+		node->next->parent = node;
+
+	graph->number++;
+
+	PrintInfoGraph(graph);
+
+	RestoringContact(graph, node);
+
+	PrintInfoGraph(graph);
+
+	return graph;
+}
+
+void RestoringContact(Graph *graph, Node *node)
+{
+	Node *Head = graph->Head;	
+	HashT *contact = node->Contact;
+
+	while (contact != NULL) {
+		HashT *restCont = CreateNodeHashT();
+
+		restCont->node = node;
+
+		if (contact->node->Contact->parent != NULL) {
+			contact->node->Contact->parent->next = restCont;
+		} else {
+			contact->node->Contact = restCont;
+		}
+
+		if (contact->node->Contact->next != NULL)
+			contact->node->Contact->next->parent = restCont;
+
+		contact->node->number++;
+
+		contact = contact->next;
 	}
 }
 
@@ -200,6 +252,7 @@ void PrintInfoGraph(Graph *graph)
 {
 	Node *node = graph->Head;
 
+	printf("Numder node = %d\n", graph->number);
 	printf("Index\tNode\t\tNext\t\tParent\t\tColor\tNumCont\tStatus\n");
 	
 	for (int i = 0; i < graph->number && node != NULL; i++) {
