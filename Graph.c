@@ -58,6 +58,7 @@ Graph *CreateGraph(int *Matrix, int line, int column)
 {
 	Graph *graph = malloc(sizeof(Graph));
 	Node **ArrNode = malloc(sizeof(ArrNode) * line);
+	Node *parent = NULL;
 
 	graph->number = line;
 
@@ -72,20 +73,23 @@ Graph *CreateGraph(int *Matrix, int line, int column)
 		ArrNode[i] = CreateNode(i, num_contact);
 
 		if (i != 0)
-			ArrNode[i - 1]->next = ArrNode[i];
+			parent->next = ArrNode[i];
+
+		ArrNode[i]->parent = parent;
 
 		#if 0
 		printf("%d\t", ArrNode[i]->index);
 		printf("%p\t", ArrNode[i]);
 		printf("%p\n", ArrNode[i]->next);
 		#endif
+		parent = ArrNode[i];
 	}
 
 	graph->Head = ArrNode[0];
 
 	Node *node = graph->Head;
 	for (int i = 0; i < line; i++) {
-		HashT *pcont = NULL;
+		HashT *parentCont = NULL;
 
 		for (int j = 0; j < column; j++) {
 
@@ -94,11 +98,12 @@ Graph *CreateGraph(int *Matrix, int line, int column)
 
 				contact->node = ArrNode[j];
 				contact->next = NULL;
+				contact->parent = parentCont;
 
-				if (pcont != NULL)
-					pcont->next = contact;
+				if (parentCont != NULL)
+					parentCont->next = contact;
 				
-				pcont = contact;
+				parentCont = contact;
 
 				if (node->Contact == NULL) {
 					node->Contact = contact;
@@ -120,7 +125,7 @@ Node *CreateNode(int index, int num_contact)
 {
 	Node *node = malloc(sizeof(Node));
 	node->next = NULL;
-	// node->Contact = malloc(sizeof(Node) * num_contact);
+	node->parent = NULL;
 	node->Contact = NULL;
 	node->index = index;
 	node->color = -1;
@@ -135,22 +140,77 @@ HashT *CreateNodeHashT()
 	HashT *Contact = malloc(sizeof(Contact));
 	Contact->node = NULL;
 	Contact->next = NULL;
+	Contact->parent = NULL;
 
 	return Contact;
+}
+
+Node *DeleteNodeSave(Graph **graph, int ind)
+{
+	Node *node = (*graph)->Head;
+
+	while (node->index != ind) {
+		node = node->next;
+	}
+
+	if (node->parent != NULL) {
+		node->parent->next = node->next;
+	} else {
+		(*graph)->Head = node->next;
+	}
+
+	if (node->next != NULL)
+		node->next->parent = node->parent;
+
+	(*graph)->number--;
+
+	DeleteNodeList((*graph)->Head, node);
+
+	return node;
+}
+
+void DeleteNodeList(Node *Head, Node *node)
+{
+	Node *head = Head;
+	while (head != NULL) {
+		HashT *contact = head->Contact;
+
+		for (int i = 0; i < head->number && contact->node->index != node->index; i++) {
+			contact = contact->next;
+		}
+
+		if (contact != NULL && contact->node->index == node->index) {
+			if (contact->parent != NULL) {
+				contact->parent->next = contact->next;
+			} else {
+				head->Contact = contact->next;
+			}
+
+			if (contact->next != NULL)
+				contact->next->parent = contact->parent;
+
+			head->number--;
+		}
+
+		head = head->next;
+	}
 }
 
 void PrintInfoGraph(Graph *graph)
 {
 	Node *node = graph->Head;
 
-	printf("Index\tNode\t\tNext\t\tColor\tNumCont\tStatus\n");
+	printf("Index\tNode\t\tNext\t\tParent\t\tColor\tNumCont\tStatus\n");
 	
-	for (int i = 0; i < graph->number; i++) {
+	for (int i = 0; i < graph->number && node != NULL; i++) {
 		printf("%d\t", node->index);
 		printf("%p\t", node);
 		printf("%p\t", node->next);
+		if (node->next == NULL)
+			printf("\t");
 
-		if (i == graph->number - 1)
+		printf("%p\t", node->parent);
+		if (node->parent == NULL)
 			printf("\t");
 
 		printf("%d\t", node->color);
@@ -221,7 +281,7 @@ void GraphImageCreation(Graph *graph)
 
 	for (int i = 0; i < graph->number; i++) {
 		HashT *contact = node->Contact;
-		
+
 		for (int j = 0; j < node->number; j++) {
 			int indCont = contact->node->index;
 			

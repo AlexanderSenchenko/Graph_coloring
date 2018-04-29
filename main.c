@@ -21,6 +21,20 @@ int main()
 
 	ColoringGraph(graph);
 
+	#if 0	
+	//// Test delete node ////
+	PrintInfoGraph(graph);
+	
+	Node *node = DeleteNodeSave(&graph, 0);
+	printf("%d\t", node->index);
+	if (node->next != NULL)
+		printf("%d\t", node->next->index);
+	if (node->parent != NULL)
+		printf("%d\n", node->parent->index);
+
+	PrintInfoGraph(graph);
+	#endif
+
 	free(Matrix);
 
 	return 0;
