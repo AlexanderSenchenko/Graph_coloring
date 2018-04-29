@@ -1,7 +1,7 @@
 #ifndef GRAPHCOLORING_H
 #define GRAPHCOLORING_H
 
-#include "graph.h"
+#include "Graph.h"
 
 void ColoringGraph(Graph *graph);
 

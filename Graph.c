@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "Graph.h"
 
 void GetMatrix(int **Matrix, int *line, int *column)
 {
@@ -81,20 +81,35 @@ Graph *CreateGraph(int *Matrix, int line, int column)
 		#endif
 	}
 
+	graph->Head = ArrNode[0];
+
+	Node *node = graph->Head;
 	for (int i = 0; i < line; i++) {
-		int ind_cont = 0;
+		HashT *pcont = NULL;
 
 		for (int j = 0; j < column; j++) {
 
 			if (Matrix[GetIndex(line, i, j)] == 1) {
-				ArrNode[i]->Contact[ind_cont] = ArrNode[j];
-				ind_cont++;
+				HashT *contact = CreateNodeHashT();
+
+				contact->node = ArrNode[j];
+				contact->next = NULL;
+
+				if (pcont != NULL)
+					pcont->next = contact;
+				
+				pcont = contact;
+
+				if (node->Contact == NULL) {
+					node->Contact = contact;
+				}
+
+				contact = contact->next;
 			}
 
 		}
+		node = node->next;
 	}
-
-	graph->Head = ArrNode[0];
 
 	free(ArrNode);
 
@@ -105,13 +120,23 @@ Node *CreateNode(int index, int num_contact)
 {
 	Node *node = malloc(sizeof(Node));
 	node->next = NULL;
-	node->Contact = malloc(sizeof(Node) * num_contact);
+	// node->Contact = malloc(sizeof(Node) * num_contact);
+	node->Contact = NULL;
 	node->index = index;
 	node->color = -1;
 	node->number = num_contact;
 	node->status = 0;
 
 	return node;
+}
+
+HashT *CreateNodeHashT()
+{
+	HashT *Contact = malloc(sizeof(Contact));
+	Contact->node = NULL;
+	Contact->next = NULL;
+
+	return Contact;
 }
 
 void PrintInfoGraph(Graph *graph)
@@ -133,10 +158,15 @@ void PrintInfoGraph(Graph *graph)
 		printf("%d\n", node->status);
 
 		if (node->Contact != NULL) {
+			HashT *contact = node->Contact;
+
 			for (int j = 0; j < node->number; j++) {
-				printf(">ind: %d\t", node->Contact[j]->index);
+				// printf(">ind: %d\t", node->Contact[j]->index);
+				printf(">ind: %d\t", contact->node->index);
 				// printf("%p\t\t\t", node->Contact[j]);
-				printf("color: %d\n", node->Contact[j]->color);
+				// printf("color: %d\n", node->Contact[j]->color);
+				printf("color: %d\n", contact->node->color);
+				contact = contact->next;
 			}
 		}
 
@@ -190,13 +220,16 @@ void GraphImageCreation(Graph *graph)
 	node = graph->Head;
 
 	for (int i = 0; i < graph->number; i++) {
+		HashT *contact = node->Contact;
+		
 		for (int j = 0; j < node->number; j++) {
-			int indCont = node->Contact[j]->index;
+			int indCont = contact->node->index;
 			
 			if (i < indCont) {
 				fprintf(out, "\t%cNode %d%c -> ", elem, i, elem);
 				fprintf(out, "%cNode %d%c;\n", elem, indCont, elem);
-			}	
+			}
+			contact = contact->next;
 		}
 		node = node->next;
 	}

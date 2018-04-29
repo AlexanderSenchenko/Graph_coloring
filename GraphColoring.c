@@ -2,7 +2,7 @@
 
 void ColoringGraph(Graph *graph)
 {
-	#if 0
+	#if 1
 	if (TwoColor(graph) == 0) {
 		PrintInfoGraph(graph);
 
@@ -13,7 +13,7 @@ void ColoringGraph(Graph *graph)
 	RebootGraph(graph);
 	#endif
 
-	TrheeColor(graph);
+	// TrheeColor(graph);
 }
 
 //////////////////// 2 ////////////////////
@@ -44,24 +44,25 @@ int RunColor(Node *node)
 	}
 	// printf("ind = %d\n", node->index);
 
+	HashT *contact = node->Contact;
 	for (int i = 0; i < node->number; i++) {
-		int act = CheckColorNode(node->Contact[i], node->color);
+		int act = CheckColorNode(contact->node, node->color);
 		if (act == 1) {
 			return 1;
 		} else if (act == 0) {
-			node->Contact[i]->color = nextColor;
-			// node->Contact[i]->status = 1;
-		} else if (act == 2) {
-			// node->Contact[i]->color = nextColor;
-			// node->Contact[i]->status = 1;
+			contact->node->color = nextColor;
 		}
+		
+		contact = contact->next;
 	}
 
 	node->status = 1;
 
+	contact = node->Contact;
 	for (int i = 0; i < node->number; i++) {
-		if (RunColor(node->Contact[i]) == 1)
+		if (RunColor(contact->node) == 1)
 			return 1;
+		contact = contact->next;
 	}
 
 	return 0;
@@ -84,7 +85,8 @@ int CheckColorNode(Node *node, int color)
 //////////////////// 3 ////////////////////
 int TrheeColor(Graph *graph)
 {
-	Node *node = graph->Head;
+	// Node *node = graph->Head;
+
 
 
 	return 0;
