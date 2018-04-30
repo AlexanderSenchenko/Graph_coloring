@@ -214,8 +214,6 @@ Graph *RestoringNode(Graph *graph, Node *node)
 
 	graph->number++;
 
-	PrintInfoGraph(graph);
-
 	RestoringContact(graph, node);
 
 	return graph;
@@ -229,84 +227,40 @@ void RestoringContact(Graph *graph, Node *node)
 		HashT *restCont = CreateNodeHashT();					// Создание узла связей
 		restCont->node = node;									// Запись в узел связей удаленного узла
 
-		if (NodeCont->node->Contact->parent != NULL) {
-			NodeCont->node->Contact->parent->next = restCont;
-		} else {
-			restCont->next = NodeCont->node->Contact;
-			NodeCont->node->Contact = restCont;
-		}
+		restCont->next = NodeCont->node->Contact;				// Смещаем всесь список связей на 1
+		NodeCont->node->Contact = restCont;						// Ставим новый узелв корень списка связей
+		NodeCont->node->Contact->next->parent = restCont;		// У пердыдущего корня устанавливаем потмка (новый корень)
 
-		if (NodeCont->node->Contact->next != NULL)
-			NodeCont->node->Contact->next->parent = restCont;
+		NodeCont->node->number++;								// Увелечение коллчества элементов в списке узла
 
-		NodeCont->node->number++;
+		NodeCont = SortListNode(NodeCont);						// Востановление списка связей во всех узлах графа
 
-		NodeCont = SortListNode(NodeCont);
-
-		NodeCont = NodeCont->next;
+		NodeCont = NodeCont->next;								// Переход в следущий узел, который нужно востановить
+																// во всех спиках связи
 	}
 }
 
 HashT *SortListNode(HashT *ListNode)
 {
-	printf("NodeInd: %d\n", ListNode->node->index);
-
-	HashT *FirstNode = ListNode->node->Contact;
-	HashT *SecondNode = ListNode->node->Contact->next;
-	printf("FirstNodeCont: %d\t", FirstNode->node->index);
-	printf("SecondNodeCont: %d\n", SecondNode->node->index);
+	HashT *FirstNode = ListNode->node->Contact;					// Первый эемент списка, который можможно нужно переместить
+	HashT *SecondNode = ListNode->node->Contact->next;			// Второй элемент списка, которой возможно станет корнем списка
 
 	while (SecondNode->next != NULL && FirstNode->node->index > SecondNode->node->index) {
-		// if (FirstNode != NULL)
-		// 	printf("FirstNodeCont: %d\t", FirstNode->node->index);
-		// if (SecondNode != NULL)
-		// 	printf("SecondNodeCont: %d\n", SecondNode->node->index);
-
-		SecondNode = SecondNode->next;
-
-		// if (FirstNode != NULL)
-		// 	printf("FirstNodeCont: %d\t", FirstNode->node->index);
-		// if (SecondNode != NULL)
-		// 	printf("SecondNodeCont: %d\n", SecondNode->node->index);
+		SecondNode = SecondNode->next;							// Поиск подходящего соседа в списке связей
 	}
 
-	if (FirstNode != NULL)
-			printf("FirstNodeCont: %d\t", FirstNode->node->index);
-	if (SecondNode != NULL)
-		printf("SecondNodeCont: %d\n", SecondNode->node->index);
-
-	// if (FirstNode->node->index > FirstNode->next->node->index &&) {
-
-	// } else 
 	if (FirstNode->node->index > FirstNode->next->node->index) {
-		HashT *Buf = FirstNode;
+		HashT *Buf = FirstNode;									// Первый узел уходит из списка для вставки в нужное место
 
-		// if (FirstNode != NULL)
-		printf("Old\n");
-		printf("FirstNodeCont: %d\t", FirstNode->node->index);
-		printf("SecondNodeCont: %d\n", FirstNode->next->node->index);
-
-		ListNode->node->Contact = FirstNode->next;
-		// printf("Root: %d\t", ListNode->node->Contact->node->index);
-		// printf("RootN: %p\t", ListNode->node->Contact->next);
-		// printf("RootP: %p\t", ListNode->node->Contact->parent);
-		// printf("Root: %d\n", ListNode->node->Contact->parent->node->index);
+		ListNode->node->Contact = FirstNode->next;				// Корень списка возвращаетя в первоночальное положение
 		ListNode->node->Contact->parent = NULL;
-		// printf("RootP: %p\t", ListNode->node->Contact->parent);
-
-		// if (FirstNode != NULL)
-		printf("New\n");
-		printf("Root: %d\t", ListNode->node->Contact->node->index);
-		printf("NTwo: %d\t", ListNode->node->Contact->next->node->index);
-		printf("ContBuf: %d\t", SecondNode->node->index);
-		printf("Buf: %d\n", Buf->node->index);
 
 		if (SecondNode->parent != NULL && Buf->node->index < SecondNode->node->index) {
-			SecondNode->parent->next = Buf;
-			Buf->parent = SecondNode->parent;
+			SecondNode->parent->next = Buf;						// 
+			Buf->parent = SecondNode->parent;					//
 		}
 
-		if (Buf->node->index < SecondNode->node->index) {
+		if (Buf->node->index < SecondNode->node->index) {		// 
 		 	SecondNode->parent = Buf;
 			Buf->next = SecondNode;
 		} else if (Buf->node->index > SecondNode->node->index) {
@@ -314,14 +268,6 @@ HashT *SortListNode(HashT *ListNode)
 			Buf->next = SecondNode->next;
 			SecondNode->next = Buf;
 		}
-
-		// printf("NewBuf\n");
-		// printf("Root: %d\t", ListNode->node->Contact->node->index);
-		// printf("Buf: %d\t", Buf->node->index);
-		// printf("BufN: %d\t", Buf->next->node->index);
-		// printf("BufP: %d\n", Buf->parent->node->index);
-		// printf("Buf: %d\n", Buf->node->index);
-
 	}
 
 	return ListNode;

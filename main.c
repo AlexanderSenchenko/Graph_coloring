@@ -42,6 +42,8 @@ int main()
 
 	#endif
 
+	ColoringGraph(graph);
+
 	free(Matrix);
 
 	return 0;
