@@ -2,7 +2,7 @@
 
 void ColoringGraph(Graph *graph)
 {
-	#if 1
+	#if 0
 	if (TwoColor(graph) == 0) {
 		PrintInfoGraph(graph);
 
@@ -13,7 +13,10 @@ void ColoringGraph(Graph *graph)
 	RebootGraph(graph);
 	#endif
 
+	#if 1
 	// TrheeColor(graph);
+	// PrintInfoGraph(graph);
+	#endif
 }
 
 //////////////////// 2 ////////////////////
@@ -23,7 +26,7 @@ int TwoColor(Graph *graph)
 
 	node->color = 0;
 
-	if (RunColor(node) == 1) {
+	if (RunTwoColor(node) == 1) {
 		printf("Error, 2 color\n");
 		return 1;
 	}
@@ -31,7 +34,7 @@ int TwoColor(Graph *graph)
 	return 0;
 }
 
-int RunColor(Node *node)
+int RunTwoColor(Node *node)
 {
 	if (node->status == 1)
 		return 0;
@@ -60,7 +63,7 @@ int RunColor(Node *node)
 
 	contact = node->Contact;
 	for (int i = 0; i < node->number; i++) {
-		if (RunColor(contact->node) == 1)
+		if (RunTwoColor(contact->node) == 1)
 			return 1;
 		contact = contact->next;
 	}
@@ -85,9 +88,39 @@ int CheckColorNode(Node *node, int color)
 //////////////////// 3 ////////////////////
 int TrheeColor(Graph *graph)
 {
-	// Node *node = graph->Head;
+	CheckPow(graph, 3);
+	return 0;
+}
 
+int CheckPow(Graph *graph, int pow)
+{
+	Node *node = graph->Head;
+	Node *delNode = NULL;
 
+	if (node->next == NULL) {
+		node->color = 0;
+		return 0;
+	}
+
+	for (int i = 0; i < graph->number; i++) {
+		if (node->number < pow) {
+			delNode = node;
+			graph = DeleteNodeSave(graph, delNode);
+
+			CheckPow(graph, pow);
+
+			graph = RestoringNode(graph, delNode);
+		}
+		node = node->next;
+	}
+
+	return 0;
+}
+
+int RunTrheeColor(Node *node, int numColor)
+{
+	if (node->status == 1)
+		return 0;
 
 	return 0;
 }
@@ -95,3 +128,5 @@ int TrheeColor(Graph *graph)
 //////////////////// 4 ////////////////////
 
 //////////////////// 5 ////////////////////
+
+////////////////// Other //////////////////

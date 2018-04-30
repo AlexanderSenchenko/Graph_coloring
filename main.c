@@ -19,23 +19,15 @@ int main()
 		return 0;
 	}
 
-	// ColoringGraph(graph);
-
 	#if 1
 	//// Test delete node ////
-	// PrintInfoGraph(graph);
+	PrintInfoGraph(graph);
 	
-	Node *node = DeleteNodeSave(&graph, 7);
+	Node *node = graph->Head->next;
+	graph = DeleteNodeSave(graph, node);
 
-	#if 0
-	printf("Del = %d\n", node->index);
-	if (node->parent != NULL)
-		printf("Par = %d\t", node->parent->index);
-	if (node->next != NULL)
-		printf("Nex = %d\n", node->next->index);
-	#endif
+	PrintInfoGraph(graph);
 
-	// PrintInfoGraph(graph);
 	graph = RestoringNode(graph, node);
 
 	PrintInfoGraph(graph);

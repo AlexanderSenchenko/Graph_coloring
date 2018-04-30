@@ -145,28 +145,22 @@ HashT *CreateNodeHashT()
 	return Contact;
 }
 
-Node *DeleteNodeSave(Graph **graph, int ind)
+Graph *DeleteNodeSave(Graph *graph, Node *node)
 {
-	Node *node = (*graph)->Head;
-
-	while (node->index != ind) {
-		node = node->next;
-	}
-
 	if (node->parent != NULL) {
 		node->parent->next = node->next;
 	} else {
-		(*graph)->Head = node->next;
+		graph->Head = node->next;
 	}
 
 	if (node->next != NULL)
 		node->next->parent = node->parent;
 
-	(*graph)->number--;
+	graph->number--;
 
-	DeleteNodeList((*graph)->Head, node);
+	DeleteNodeList(graph->Head, node);
 
-	return node;
+	return graph;
 }
 
 void DeleteNodeList(Node *Head, Node *node)
@@ -214,12 +208,12 @@ Graph *RestoringNode(Graph *graph, Node *node)
 
 	graph->number++;
 
-	RestoringContact(graph, node);
+	RestoringContact(node);
 
 	return graph;
 }
 
-void RestoringContact(Graph *graph, Node *node)
+void RestoringContact(Node *node)
 {
 	HashT *NodeCont = node->Contact;							// Указатель на первый связный узел узла node
 
@@ -229,7 +223,8 @@ void RestoringContact(Graph *graph, Node *node)
 
 		restCont->next = NodeCont->node->Contact;				// Смещаем всесь список связей на 1
 		NodeCont->node->Contact = restCont;						// Ставим новый узелв корень списка связей
-		NodeCont->node->Contact->next->parent = restCont;		// У пердыдущего корня устанавливаем потмка (новый корень)
+		if (NodeCont->node->Contact != NULL)
+			NodeCont->node->Contact->next->parent = restCont;	// У пердыдущего корня устанавливаем потмка (новый корень)
 
 		NodeCont->node->number++;								// Увелечение коллчества элементов в списке узла
 
@@ -256,11 +251,11 @@ HashT *SortListNode(HashT *ListNode)
 		ListNode->node->Contact->parent = NULL;
 
 		if (SecondNode->parent != NULL && Buf->node->index < SecondNode->node->index) {
-			SecondNode->parent->next = Buf;						// 
-			Buf->parent = SecondNode->parent;					//
+			SecondNode->parent->next = Buf;
+			Buf->parent = SecondNode->parent;
 		}
 
-		if (Buf->node->index < SecondNode->node->index) {		// 
+		if (Buf->node->index < SecondNode->node->index) {
 		 	SecondNode->parent = Buf;
 			Buf->next = SecondNode;
 		} else if (Buf->node->index > SecondNode->node->index) {

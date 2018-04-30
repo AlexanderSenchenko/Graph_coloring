@@ -36,11 +36,11 @@ Graph *CreateGraph(int *Matrix, int line, int column);
 Node *CreateNode(int index, int num_contact);
 HashT *CreateNodeHashT();
 
-Node *DeleteNodeSave(Graph **graph, int ind);
+Graph *DeleteNodeSave(Graph *graph, Node *node);
 void DeleteNodeList(Node *Head, Node *node);
 
 Graph *RestoringNode(Graph *graph, Node *node);
-void RestoringContact(Graph *graph, Node *node);
+void RestoringContact(Node *node);
 HashT *SortListNode(HashT *NodeCont);
 
 void PrintInfoGraph(Graph *graph);
