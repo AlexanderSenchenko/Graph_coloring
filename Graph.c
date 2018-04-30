@@ -218,34 +218,113 @@ Graph *RestoringNode(Graph *graph, Node *node)
 
 	RestoringContact(graph, node);
 
-	PrintInfoGraph(graph);
-
 	return graph;
 }
 
 void RestoringContact(Graph *graph, Node *node)
 {
-	Node *Head = graph->Head;	
-	HashT *contact = node->Contact;
+	HashT *NodeCont = node->Contact;							// Указатель на первый связный узел узла node
 
-	while (contact != NULL) {
-		HashT *restCont = CreateNodeHashT();
+	while (NodeCont != NULL) {
+		HashT *restCont = CreateNodeHashT();					// Создание узла связей
+		restCont->node = node;									// Запись в узел связей удаленного узла
 
-		restCont->node = node;
-
-		if (contact->node->Contact->parent != NULL) {
-			contact->node->Contact->parent->next = restCont;
+		if (NodeCont->node->Contact->parent != NULL) {
+			NodeCont->node->Contact->parent->next = restCont;
 		} else {
-			contact->node->Contact = restCont;
+			restCont->next = NodeCont->node->Contact;
+			NodeCont->node->Contact = restCont;
 		}
 
-		if (contact->node->Contact->next != NULL)
-			contact->node->Contact->next->parent = restCont;
+		if (NodeCont->node->Contact->next != NULL)
+			NodeCont->node->Contact->next->parent = restCont;
 
-		contact->node->number++;
+		NodeCont->node->number++;
 
-		contact = contact->next;
+		NodeCont = SortListNode(NodeCont);
+
+		NodeCont = NodeCont->next;
 	}
+}
+
+HashT *SortListNode(HashT *ListNode)
+{
+	printf("NodeInd: %d\n", ListNode->node->index);
+
+	HashT *FirstNode = ListNode->node->Contact;
+	HashT *SecondNode = ListNode->node->Contact->next;
+	printf("FirstNodeCont: %d\t", FirstNode->node->index);
+	printf("SecondNodeCont: %d\n", SecondNode->node->index);
+
+	while (SecondNode->next != NULL && FirstNode->node->index > SecondNode->node->index) {
+		// if (FirstNode != NULL)
+		// 	printf("FirstNodeCont: %d\t", FirstNode->node->index);
+		// if (SecondNode != NULL)
+		// 	printf("SecondNodeCont: %d\n", SecondNode->node->index);
+
+		SecondNode = SecondNode->next;
+
+		// if (FirstNode != NULL)
+		// 	printf("FirstNodeCont: %d\t", FirstNode->node->index);
+		// if (SecondNode != NULL)
+		// 	printf("SecondNodeCont: %d\n", SecondNode->node->index);
+	}
+
+	if (FirstNode != NULL)
+			printf("FirstNodeCont: %d\t", FirstNode->node->index);
+	if (SecondNode != NULL)
+		printf("SecondNodeCont: %d\n", SecondNode->node->index);
+
+	// if (FirstNode->node->index > FirstNode->next->node->index &&) {
+
+	// } else 
+	if (FirstNode->node->index > FirstNode->next->node->index) {
+		HashT *Buf = FirstNode;
+
+		// if (FirstNode != NULL)
+		printf("Old\n");
+		printf("FirstNodeCont: %d\t", FirstNode->node->index);
+		printf("SecondNodeCont: %d\n", FirstNode->next->node->index);
+
+		ListNode->node->Contact = FirstNode->next;
+		// printf("Root: %d\t", ListNode->node->Contact->node->index);
+		// printf("RootN: %p\t", ListNode->node->Contact->next);
+		// printf("RootP: %p\t", ListNode->node->Contact->parent);
+		// printf("Root: %d\n", ListNode->node->Contact->parent->node->index);
+		ListNode->node->Contact->parent = NULL;
+		// printf("RootP: %p\t", ListNode->node->Contact->parent);
+
+		// if (FirstNode != NULL)
+		printf("New\n");
+		printf("Root: %d\t", ListNode->node->Contact->node->index);
+		printf("NTwo: %d\t", ListNode->node->Contact->next->node->index);
+		printf("ContBuf: %d\t", SecondNode->node->index);
+		printf("Buf: %d\n", Buf->node->index);
+
+		if (SecondNode->parent != NULL && Buf->node->index < SecondNode->node->index) {
+			SecondNode->parent->next = Buf;
+			Buf->parent = SecondNode->parent;
+		}
+
+		if (Buf->node->index < SecondNode->node->index) {
+		 	SecondNode->parent = Buf;
+			Buf->next = SecondNode;
+		} else if (Buf->node->index > SecondNode->node->index) {
+			Buf->parent = SecondNode;
+			Buf->next = SecondNode->next;
+			SecondNode->next = Buf;
+		}
+
+		// printf("NewBuf\n");
+		// printf("Root: %d\t", ListNode->node->Contact->node->index);
+		// printf("Buf: %d\t", Buf->node->index);
+		// printf("BufN: %d\t", Buf->next->node->index);
+		// printf("BufP: %d\n", Buf->parent->node->index);
+		// printf("Buf: %d\n", Buf->node->index);
+
+	}
+
+	return ListNode;
 }
 
 void PrintInfoGraph(Graph *graph)

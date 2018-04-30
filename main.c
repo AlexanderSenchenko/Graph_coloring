@@ -25,7 +25,7 @@ int main()
 	//// Test delete node ////
 	// PrintInfoGraph(graph);
 	
-	Node *node = DeleteNodeSave(&graph, 0);
+	Node *node = DeleteNodeSave(&graph, 7);
 
 	#if 0
 	printf("Del = %d\n", node->index);
@@ -37,6 +37,8 @@ int main()
 
 	// PrintInfoGraph(graph);
 	graph = RestoringNode(graph, node);
+
+	PrintInfoGraph(graph);
 
 	#endif
 

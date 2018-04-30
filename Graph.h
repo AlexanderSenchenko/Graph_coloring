@@ -41,6 +41,7 @@ void DeleteNodeList(Node *Head, Node *node);
 
 Graph *RestoringNode(Graph *graph, Node *node);
 void RestoringContact(Graph *graph, Node *node);
+HashT *SortListNode(HashT *NodeCont);
 
 void PrintInfoGraph(Graph *graph);
 void RebootGraph(Graph *graph);
