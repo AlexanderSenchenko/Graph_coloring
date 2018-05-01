@@ -14,8 +14,12 @@ void ColoringGraph(Graph *graph)
 	#endif
 
 	#if 1
-	TrheeColor(graph);
-	PrintInfoGraph(graph);
+	if (TrheeColor(graph) == 0) {
+		PrintInfoGraph(graph);
+
+		GraphImageCreation(graph);
+		system("dot -Tpng graph.gv -ograph.png");
+	}
 	#endif
 }
 
@@ -88,7 +92,12 @@ int CheckColorNode(Node *node, int color)
 //////////////////// 3 ////////////////////
 int TrheeColor(Graph *graph)
 {
-	CheckPow(graph, 3);
+	int act = CheckPow(graph, 6);
+	if (act == 1) {
+		// printf("Not available color");
+		return 1;
+	}
+
 	return 0;
 }
 
@@ -98,22 +107,25 @@ int CheckPow(Graph *graph, int pow)
 	Node *delNode = NULL;
 
 	if (node->next == NULL) {
+		node->status = 1;
 		node->color = 0;
 		return 0;
 	}
 
 	#if 1
 	for (int i = 0; i < graph->number; i++) {
-		if (node->number < pow) {
+		if (node->number < pow && node->status != 1) {
 			delNode = node;
 			graph = DeleteNodeSave(graph, delNode);
 
 			CheckPow(graph, pow);
 
 			graph = RestoringNode(graph, delNode);
+
+			int act = RunTrheeColor(delNode, pow);
+			if (act == 1)
+				return 1;
 		}
-		if (node->next->color != -1)
-			continue;
 
 		node = node->next;
 	}
@@ -126,10 +138,46 @@ int RunTrheeColor(Node *node, int numColor)
 {
 	if (node->status == 1)
 		return 0;
+	
+	int act = CheckNColor(node, numColor, 0);
+
+	if (act == 1)
+		return 1;
 
 	return 0;
 }
 
+int CheckNColor(Node *node, int numColor, int color)
+{
+	if (node->status == 1)
+		return 0;
+
+	HashT *NCont = node->Contact;
+
+	for (int i = 0; i < node->number && node->color == -1; i++) {
+		if (NCont->node->color == color) {
+			int act = CheckNColor(node, numColor, color + 1);
+
+			if (act == 1)
+				return 1;
+
+			// color++;
+		}
+		NCont = NCont->next;
+	}
+
+	if (numColor < color) {
+		printf("Not available color");
+		return 1;
+	}
+
+	if (node->color == -1) {
+		node->color = color;
+		node->status = 1;
+	}
+
+	return 0;
+}
 //////////////////// 4 ////////////////////
 
 //////////////////// 5 ////////////////////
