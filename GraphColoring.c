@@ -14,8 +14,8 @@ void ColoringGraph(Graph *graph)
 	#endif
 
 	#if 1
-	// TrheeColor(graph);
-	// PrintInfoGraph(graph);
+	TrheeColor(graph);
+	PrintInfoGraph(graph);
 	#endif
 }
 
@@ -102,6 +102,7 @@ int CheckPow(Graph *graph, int pow)
 		return 0;
 	}
 
+	#if 1
 	for (int i = 0; i < graph->number; i++) {
 		if (node->number < pow) {
 			delNode = node;
@@ -111,8 +112,12 @@ int CheckPow(Graph *graph, int pow)
 
 			graph = RestoringNode(graph, delNode);
 		}
+		if (node->next->color != -1)
+			continue;
+
 		node = node->next;
 	}
+	#endif
 
 	return 0;
 }

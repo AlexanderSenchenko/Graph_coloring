@@ -222,8 +222,9 @@ void RestoringContact(Node *node)
 		restCont->node = node;									// Запись в узел связей удаленного узла
 
 		restCont->next = NodeCont->node->Contact;				// Смещаем всесь список связей на 1
+		// restCont->next = NodeCont;
 		NodeCont->node->Contact = restCont;						// Ставим новый узелв корень списка связей
-		if (NodeCont->node->Contact != NULL)
+		if (NodeCont->node->Contact->next != NULL)
 			NodeCont->node->Contact->next->parent = restCont;	// У пердыдущего корня устанавливаем потмка (новый корень)
 
 		NodeCont->node->number++;								// Увелечение коллчества элементов в списке узла
@@ -240,11 +241,11 @@ HashT *SortListNode(HashT *ListNode)
 	HashT *FirstNode = ListNode->node->Contact;					// Первый эемент списка, который можможно нужно переместить
 	HashT *SecondNode = ListNode->node->Contact->next;			// Второй элемент списка, которой возможно станет корнем списка
 
-	while (SecondNode->next != NULL && FirstNode->node->index > SecondNode->node->index) {
+	while (SecondNode != NULL && SecondNode->next != NULL && FirstNode->node->index > SecondNode->node->index) {
 		SecondNode = SecondNode->next;							// Поиск подходящего соседа в списке связей
 	}
 
-	if (FirstNode->node->index > FirstNode->next->node->index) {
+	if (FirstNode->next != NULL && FirstNode->node->index > FirstNode->next->node->index) {
 		HashT *Buf = FirstNode;									// Первый узел уходит из списка для вставки в нужное место
 
 		ListNode->node->Contact = FirstNode->next;				// Корень списка возвращаетя в первоночальное положение
