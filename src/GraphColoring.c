@@ -13,24 +13,96 @@ void ColoringGraph(Graph *graph)
 	RebootGraph(graph);
 	#endif
 
-	#if 1
-	if (TrheeColor(graph) == 0) {
+	#if 0
+	if (Coloring(graph, 6) == 0) {
 		PrintInfoGraph(graph);
 
 		GraphImageCreation(graph);
 		system("dot -Tpng graph.gv -ograph.png");
 	}
+
+	RebootGraph(graph);
+	#endif
+
+	#if 1
+	int act;
+
+	system("clear");
+
+	while (act != 7) {
+		printf("\n");
+		printf("1) Расскарасить граф в 2 цвета\n");
+		printf("2) Расскарасить граф в 3 или менее цвета\n");
+		printf("3) Расскарасить граф в 4 или менее цвета\n");
+		printf("4) Расскарасить граф в 5 или менее цветов\n");
+		printf("5) Расскарасить граф\n");
+		printf("6) Вывод информации о црафе\n");
+		printf("7) Выход\n");
+		printf("Выберите действие: ");
+		scanf("%d", &act);
+
+		switch(act) {
+			case 1:
+				system("clear");
+				RebootGraph(graph);
+				if (TwoColor(graph) == 0) {
+					GraphImageCreation(graph);
+					system("dot -Tpng graph.gv -ograph.png");
+				}
+				break;
+			case 2:
+				system("clear");
+				RebootGraph(graph);
+				if (TFFColor(graph, 3) == 0) {
+					GraphImageCreation(graph);
+					system("dot -Tpng graph.gv -ograph.png");
+				}
+				break;
+			case 3:
+				system("clear");
+				RebootGraph(graph);
+				if (TFFColor(graph, 4) == 0) {
+					GraphImageCreation(graph);
+					system("dot -Tpng graph.gv -ograph.png");
+				}
+				break;
+			case 4:
+				system("clear");
+				RebootGraph(graph);
+				if (TFFColor(graph, 5) == 0) {
+					GraphImageCreation(graph);
+					system("dot -Tpng graph.gv -ograph.png");
+				}
+				break;
+			case 5:
+				system("clear");
+				RebootGraph(graph);
+				if (NColor(graph) == 0) {
+					GraphImageCreation(graph);
+					system("dot -Tpng graph.gv -ograph.png");
+				}
+				break;
+			case 6:
+				system("clear");
+				PrintInfoGraph(graph);
+				break;
+			case 7:
+				break;
+			default:
+				system("clear");
+				printf("Ошибка действия\n\n");
+		}
+	}
 	#endif
 }
 
-//////////////////// 2 ////////////////////
 int TwoColor(Graph *graph)
 {
 	Node *node = graph->Head;
 
 	node->color = 0;
 
-	if (RunTwoColor(node) == 1) {
+	if (TwoColorRun(node) == 1) {
 		printf("Error, 2 color\n");
 		return 1;
 	}
@@ -38,7 +110,7 @@ int TwoColor(Graph *graph)
 	return 0;
 }
 
-int RunTwoColor(Node *node)
+int TwoColorRun(Node *node)
 {
 	if (node->status == 1)
 		return 0;
@@ -49,11 +121,10 @@ int RunTwoColor(Node *node)
 	} else if (node->color == 1) {
 		nextColor = 0;
 	}
-	// printf("ind = %d\n", node->index);
 
 	HashT *contact = node->Contact;
 	for (int i = 0; i < node->number; i++) {
-		int act = CheckColorNode(contact->node, node->color);
+		int act = TwoColorCheckNode(contact->node, node->color);
 		if (act == 1) {
 			return 1;
 		} else if (act == 0) {
@@ -67,7 +138,7 @@ int RunTwoColor(Node *node)
 
 	contact = node->Contact;
 	for (int i = 0; i < node->number; i++) {
-		if (RunTwoColor(contact->node) == 1)
+		if (TwoColorRun(contact->node) == 1)
 			return 1;
 		contact = contact->next;
 	}
@@ -75,13 +146,10 @@ int RunTwoColor(Node *node)
 	return 0;
 }
 
-int CheckColorNode(Node *node, int color)
+int TwoColorCheckNode(Node *node, int color)
 {
-	if (node->color == color) {
-		// printf("ind: %d\n", node->index);
-		// printf("color: %d\n", node->color);
+	if (node->color == color)
 		return 1;
-	}
 
 	if (node->color != -1)
 		return 2;
@@ -89,22 +157,18 @@ int CheckColorNode(Node *node, int color)
 	return 0;
 }
 
-//////////////////// 3 ////////////////////
-int TrheeColor(Graph *graph)
+int TFFColor(Graph *graph, int color)
 {
-	int act = CheckPow(graph, 6);
-	if (act == 1) {
-		// printf("Not available color");
+	int act = TFFColorCheckPow(graph, color);
+	if (act == 1)
 		return 1;
-	}
 
 	return 0;
 }
 
-int CheckPow(Graph *graph, int pow)
+int TFFColorCheckPow(Graph *graph, int pow)
 {
 	Node *node = graph->Head;
-	Node *delNode = NULL;
 
 	if (node->next == NULL) {
 		node->status = 1;
@@ -112,42 +176,38 @@ int CheckPow(Graph *graph, int pow)
 		return 0;
 	}
 
-	#if 1
 	for (int i = 0; i < graph->number; i++) {
 		if (node->number < pow && node->status != 1) {
-			delNode = node;
-			graph = DeleteNodeSave(graph, delNode);
+			graph = DeleteNodeSave(graph, node);
 
-			CheckPow(graph, pow);
+			TFFColorCheckPow(graph, pow);
 
-			graph = RestoringNode(graph, delNode);
+			graph = RestoringNode(graph, node);
 
-			int act = RunTrheeColor(delNode, pow);
+			int act = TFFColorRun(node, pow);
 			if (act == 1)
 				return 1;
 		}
 
 		node = node->next;
 	}
-	#endif
 
 	return 0;
 }
 
-int RunTrheeColor(Node *node, int numColor)
+int TFFColorRun(Node *node, int numColor)
 {
 	if (node->status == 1)
 		return 0;
-	
-	int act = CheckNColor(node, numColor, 0);
 
+	int act = TFFColorCheckNode(node, numColor, 0);
 	if (act == 1)
 		return 1;
 
 	return 0;
 }
 
-int CheckNColor(Node *node, int numColor, int color)
+int TFFColorCheckNode(Node *node, int numColor, int color)
 {
 	if (node->status == 1)
 		return 0;
@@ -156,12 +216,9 @@ int CheckNColor(Node *node, int numColor, int color)
 
 	for (int i = 0; i < node->number && node->color == -1; i++) {
 		if (NCont->node->color == color) {
-			int act = CheckNColor(node, numColor, color + 1);
-
+			int act = TFFColorCheckNode(node, numColor, color + 1);
 			if (act == 1)
 				return 1;
-
-			// color++;
 		}
 		NCont = NCont->next;
 	}
@@ -178,8 +235,35 @@ int CheckNColor(Node *node, int numColor, int color)
 
 	return 0;
 }
-//////////////////// 4 ////////////////////
 
-//////////////////// 5 ////////////////////
+int NColor(Graph *graph)
+{
+	Node *node = graph->Head;
 
-////////////////// Other //////////////////
+	NColorRun(node);
+
+	return 0;
+}
+
+int NColorRun(Node *node)
+{
+	int color = 0;
+
+	color = NColorCheck(node, color);
+
+	return 0;
+}
+
+int NColorCheck(Node *node, int color)
+{
+	HashT *contact = node->Contact;
+	for (int i = 0; i < node->number; i++) {
+		if (color == contact->node->color)
+			// NColorCheck
+
+		contact = contact->next;
+	}
+	return 0;
+}
+
+// int NColor

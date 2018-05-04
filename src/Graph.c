@@ -322,8 +322,6 @@ void RebootGraph(Graph *graph)
 
 void GraphImageCreation(Graph *graph)
 {
-	// char *file = ;
-
 	FILE *out = fopen("graph.gv", "w");
 	if (out == NULL) {
 		return;

@@ -10,14 +10,6 @@ int main()
 	GetMatrix(&Matrix, &line, &column);
 
 	graph = CreateGraph(Matrix, line, column);
-	if (graph == NULL) {
-		printf("Error\n");
-		return 0;
-	}
-	if (graph->Head == NULL) {
-		printf("Error\n");
-		return 0;
-	}
 
 	#if 0
 	//// Test delete node ////
