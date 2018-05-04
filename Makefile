@@ -1,2 +1,2 @@
 all:
-	gcc -Wall -g *.c -o main
+	gcc -Wall -g src/*.c -o bin/main
