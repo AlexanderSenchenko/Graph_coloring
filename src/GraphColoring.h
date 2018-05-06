@@ -10,9 +10,10 @@ int TwoColorCheckNode(Node *node, int color);				// Проверка status и c
 int TFFColorCheckPow(Graph *graph, int pow);				// Проверка узлов на колличество связей и продолжение окраски
 int TFFColorRun(Node *node, int numColor);					// Зпуск проверки смежных узлов
 int TFFColorCheckNode(Node *node, int numColor, int color);	// Проверка смежных узлов для окраски узла в свобдный цвет
-int NColor(Graph *graph);									//
-int NColorRun(Node *node);
-int NColorCheck(Node *node, int color);
-int NColorCheckContact(Node *node, int color);
+int NColor(Graph *graph);									// Начало расскраски в N цветов
+int NColorRun(Node *node);                                  // Покраска узла 
+int NColorRunContact(Node *node);                           // Обход смежных узлов
+int NColorContact(Node *node);                              // Покраска смежных узлв
+int NColorCheckContact(Node *node, int color);              // Поиск доступного цвета
 
 #endif

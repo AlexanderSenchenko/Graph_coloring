@@ -13,8 +13,17 @@ void ColoringGraph(Graph *graph)
 	RebootGraph(graph);
 	#endif
 
-	#if 0
-	if (Coloring(graph, 6) == 0) {
+	#if 1
+	if (TFFColorCheckPow(graph, 3) == 0) {
+		PrintInfoGraph(graph);
+
+		GraphImageCreation(graph);
+		system("dot -Tpng graph.gv -ograph.png");
+	}
+	#endif
+
+	#if 1
+	if (TFFColorCheckPow(graph, 4) == 0) {
 		PrintInfoGraph(graph);
 
 		GraphImageCreation(graph);
@@ -24,8 +33,10 @@ void ColoringGraph(Graph *graph)
 	RebootGraph(graph);
 	#endif
 
-	#if 1
+	#if 0
 	if (NColor(graph) == 0) {
+		PrintInfoGraph(graph);
+
 		GraphImageCreation(graph);
 		system("dot -Tpng graph.gv -ograph.png");
 	}
@@ -250,23 +261,43 @@ int NColorRun(Node *node)
 	if (node->status == 1)
 		return 0;
 
-	int color = NColorCheckContact(node, 0);
+	if (node->color == -1) {
+		int color = NColorCheckContact(node, 0);
+		node->color = color;
+	}
 
-	node->color = color;
+	NColorRunContact(node);
+
 	node->status = 1;
 
-	NColorCheck(node, 0);
-	return 0;
-}
-
-int NColorCheck(Node *node, int color)
-{
 	HashT *contact = node->Contact;
 	for (int i = 0; i < node->number; i++) {
-		// NColorCheck(contact->node, color + 1);
 		NColorRun(contact->node);
 		contact = contact->next;
 	}
+
+	return 0;
+}
+
+int NColorRunContact(Node *node)
+{
+	HashT *contact = node->Contact;
+	for (int i = 0; i < node->number; i++) {
+		NColorContact(contact->node);
+		contact = contact->next;
+	}
+	return 0;
+}
+
+int NColorContact(Node *node)
+{
+	if (node->color != -1)
+		return 0;
+
+	int color = NColorCheckContact(node, 0);
+
+	node->color = color;
+
 	return 0;
 }
 
