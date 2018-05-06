@@ -2,11 +2,11 @@ digraph HelloGraph {
 	node [shape="circle", style="filled", margin="0.01"];
 	edge [dir="none"];
 
-	"Node 0" [fillcolor="Pн"]
-	"Node 1" [fillcolor="Pн"]
-	"Node 2" [fillcolor="Pн"]
-	"Node 3" [fillcolor="Pн"]
-	"Node 4" [fillcolor="Pн"]
+	"Node 0" [fillcolor="deeppink"]
+	"Node 1" [fillcolor="lawngreen"]
+	"Node 2" [fillcolor="red"]
+	"Node 3" [fillcolor="lawngreen"]
+	"Node 4" [fillcolor="red"]
 
 	"Node 0" -> "Node 1";
 	"Node 0" -> "Node 2";
