@@ -251,7 +251,7 @@ int NColorRun(Node *node)
 		return 0;
 
 	int color = NColorCheckContact(node, 0);
-	
+
 	node->color = color;
 	node->status = 1;
 
@@ -263,7 +263,8 @@ int NColorCheck(Node *node, int color)
 {
 	HashT *contact = node->Contact;
 	for (int i = 0; i < node->number; i++) {
-		NColorCheck(node->Contact->node, color + 1	);
+		// NColorCheck(contact->node, color + 1);
+		NColorRun(contact->node);
 		contact = contact->next;
 	}
 	return 0;
@@ -274,7 +275,7 @@ int NColorCheckContact(Node *node, int color)
 	HashT *contact = node->Contact;
 	for (int i = 0; i < node->number; i++) {
 		if (color == contact->node->color)
-			NColorCheckContact(node, color + 1);
+			color = NColorCheckContact(node, color + 1);
 
 		contact = contact->next;
 	}

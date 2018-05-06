@@ -2,9 +2,9 @@ digraph HelloGraph {
 	node [shape="circle", style="filled", margin="0.01"];
 	edge [dir="none"];
 
-	"Node 0" [fillcolor="deeppink"]
+	"Node 0" [fillcolor="red"]
 	"Node 1" [fillcolor="lawngreen"]
-	"Node 2" [fillcolor="red"]
+	"Node 2" [fillcolor="deeppink"]
 	"Node 3" [fillcolor="lawngreen"]
 	"Node 4" [fillcolor="red"]
 
