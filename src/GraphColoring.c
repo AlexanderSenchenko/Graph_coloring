@@ -2,61 +2,18 @@
 
 void ColoringGraph(Graph *graph)
 {
-	#if 0
-	if (TwoColor(graph) == 0) {
-		PrintInfoGraph(graph);
-
-		GraphImageCreation(graph);
-		system("dot -Tpng graph.gv -ograph.png");
-	}
-
-	RebootGraph(graph);
-	#endif
-
-	#if 0
-	if (TFFColor(graph, 4) == 0) {
-		PrintInfoGraph(graph);
-
-		GraphImageCreation(graph);
-		system("dot -Tpng graph.gv -ograph.png");
-	}
-	#endif
-
-	#if 0
-	if (TFFColor(graph, 4) == 0) {
-		PrintInfoGraph(graph);
-
-		GraphImageCreation(graph);
-		system("dot -Tpng graph.gv -ograph.png");
-	}
-
-	RebootGraph(graph);
-	#endif
-
-	#if 0
-	if (NColor(graph) == 0) {
-		PrintInfoGraph(graph);
-
-		GraphImageCreation(graph);
-		system("dot -Tpng graph.gv -ograph.png");
-	}
-
-	RebootGraph(graph);
-	#endif
-
-	#if 1
 	int act;
 
 	system("clear");
 
 	while (act != 7) {
 		printf("\n");
-		printf("1) Расскарасить граф в 2 цвета\n");
-		printf("2) Расскарасить граф в 3 или менее цвета\n");
-		printf("3) Расскарасить граф в 4 или менее цвета\n");
-		printf("4) Расскарасить граф в 5 или менее цветов\n");
-		printf("5) Расскарасить граф\n");
-		printf("6) Вывод информации о црафе\n");
+		printf("1) Раскарасить граф в 2 цвета\n");
+		printf("2) Раскарасить граф в 3 или менее цвета\n");
+		printf("3) Раскарасить граф в 4 или менее цвета\n");
+		printf("4) Раскарасить граф в 5 или менее цветов\n");
+		printf("5) Раскарасить граф\n");
+		printf("6) Вывод информации о графе\n");
 		printf("7) Выход\n");
 		printf("Выберите действие: ");
 		scanf("%d", &act);
@@ -113,7 +70,6 @@ void ColoringGraph(Graph *graph)
 				printf("Ошибка действия\n\n");
 		}
 	}
-	#endif
 }
 
 int TwoColor(Graph *graph)

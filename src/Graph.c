@@ -222,7 +222,6 @@ void RestoringContact(Node *node)
 		restCont->node = node;									// Запись в узел связей удаленного узла
 
 		restCont->next = NodeCont->node->Contact;				// Смещаем всесь список связей на 1
-		// restCont->next = NodeCont;
 		NodeCont->node->Contact = restCont;						// Ставим новый узелв корень списка связей
 		if (NodeCont->node->Contact->next != NULL)
 			NodeCont->node->Contact->next->parent = restCont;	// У пердыдущего корня устанавливаем потмка (новый корень)
@@ -295,10 +294,7 @@ void PrintInfoGraph(Graph *graph)
 			HashT *contact = node->Contact;
 
 			for (int j = 0; j < node->number; j++) {
-				// printf(">ind: %d\t", node->Contact[j]->index);
 				printf(">ind: %d\t", contact->node->index);
-				// printf("%p\t\t\t", node->Contact[j]);
-				// printf("color: %d\n", node->Contact[j]->color);
 				printf("color: %d\n", contact->node->color);
 				contact = contact->next;
 			}
@@ -342,15 +338,14 @@ void GraphImageCreation(Graph *graph)
 
 	for (int i = 0; i < graph->number; i++) {
 		int ncolor = node->color;
-		fprintf(out, "\t%cNode %d%c [fillcolor=%c%s%c]\n", 
-								elem, i, elem, elem, colors[ncolor], elem);
+		fprintf(out, "\t%cbox%d%c [label=%cNode: %d\\nColor: %d%c,", 
+								elem, i, elem, elem, i, ncolor, elem);
+		fprintf(out, " fillcolor=%c%s%c];\n", elem, colors[ncolor], elem);
 		node = node->next;
 	}
-
 	fprintf(out, "\n");
 
 	node = graph->Head;
-
 	for (int i = 0; i < graph->number; i++) {
 		HashT *contact = node->Contact;
 
@@ -358,8 +353,8 @@ void GraphImageCreation(Graph *graph)
 			int indCont = contact->node->index;
 			
 			if (i < indCont) {
-				fprintf(out, "\t%cNode %d%c -> ", elem, i, elem);
-				fprintf(out, "%cNode %d%c;\n", elem, indCont, elem);
+				fprintf(out, "\t%cbox%d%c -> ", elem, i, elem);
+				fprintf(out, "%cbox%d%c;\n", elem, indCont, elem);
 			}
 			contact = contact->next;
 		}

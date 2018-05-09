@@ -2,28 +2,28 @@ digraph HelloGraph {
 	node [shape="circle", style="filled", margin="0.01"];
 	edge [dir="none"];
 
-	"Node 0" [fillcolor="red"]
-	"Node 1" [fillcolor="lawngreen"]
-	"Node 2" [fillcolor="deeppink"]
-	"Node 3" [fillcolor="cyan"]
-	"Node 4" [fillcolor="indigo"]
-	"Node 5" [fillcolor="red"]
-	"Node 6" [fillcolor="lawngreen"]
+	"box0" [label="Node: 0\nColor: 1", fillcolor="lawngreen"];
+	"box1" [label="Node: 1\nColor: 0", fillcolor="red"];
+	"box2" [label="Node: 2\nColor: 1", fillcolor="lawngreen"];
+	"box3" [label="Node: 3\nColor: 3", fillcolor="cyan"];
+	"box4" [label="Node: 4\nColor: 2", fillcolor="deeppink"];
+	"box5" [label="Node: 5\nColor: 0", fillcolor="red"];
+	"box6" [label="Node: 6\nColor: 1", fillcolor="lawngreen"];
+	"box7" [label="Node: 7\nColor: 0", fillcolor="red"];
 
-	"Node 0" -> "Node 1";
-	"Node 0" -> "Node 2";
-	"Node 0" -> "Node 3";
-	"Node 0" -> "Node 4";
-	"Node 1" -> "Node 2";
-	"Node 1" -> "Node 3";
-	"Node 1" -> "Node 4";
-	"Node 2" -> "Node 3";
-	"Node 2" -> "Node 4";
-	"Node 2" -> "Node 5";
-	"Node 3" -> "Node 4";
-	"Node 3" -> "Node 5";
-	"Node 3" -> "Node 6";
-	"Node 4" -> "Node 5";
-	"Node 4" -> "Node 6";
-	"Node 5" -> "Node 6";
+	"box0" -> "box1";
+	"box0" -> "box3";
+	"box0" -> "box7";
+	"box1" -> "box3";
+	"box1" -> "box4";
+	"box2" -> "box3";
+	"box2" -> "box5";
+	"box2" -> "box7";
+	"box3" -> "box4";
+	"box3" -> "box5";
+	"box3" -> "box6";
+	"box4" -> "box6";
+	"box4" -> "box7";
+	"box5" -> "box6";
+	"box6" -> "box7";
 }
