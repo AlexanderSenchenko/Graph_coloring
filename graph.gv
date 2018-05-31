@@ -2,14 +2,14 @@ digraph HelloGraph {
 	node [shape="circle", style="filled", margin="0.01"];
 	edge [dir="none"];
 
-	"box0" [label="Node: 0\nColor: 1", fillcolor="lawngreen"];
-	"box1" [label="Node: 1\nColor: 0", fillcolor="red"];
-	"box2" [label="Node: 2\nColor: 1", fillcolor="lawngreen"];
-	"box3" [label="Node: 3\nColor: 3", fillcolor="cyan"];
-	"box4" [label="Node: 4\nColor: 2", fillcolor="deeppink"];
-	"box5" [label="Node: 5\nColor: 0", fillcolor="red"];
-	"box6" [label="Node: 6\nColor: 1", fillcolor="lawngreen"];
-	"box7" [label="Node: 7\nColor: 0", fillcolor="red"];
+	"box0" [label="Node: 0\nColor: 0", fillcolor="red"];
+	"box1" [label="Node: 1\nColor: 1", fillcolor="lawngreen"];
+	"box2" [label="Node: 2\nColor: 0", fillcolor="red"];
+	"box3" [label="Node: 3\nColor: 2", fillcolor="deeppink"];
+	"box4" [label="Node: 4\nColor: 0", fillcolor="red"];
+	"box5" [label="Node: 5\nColor: 1", fillcolor="lawngreen"];
+	"box6" [label="Node: 6\nColor: 3", fillcolor="cyan"];
+	"box7" [label="Node: 7\nColor: 1", fillcolor="lawngreen"];
 
 	"box0" -> "box1";
 	"box0" -> "box3";
